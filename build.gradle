@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+}
+
+ext {
+	junitJupiterVersion = '5.6.1'
+	assertJVersion = '3.15.0'
+	mockitoVersion = '3.3.3'
+	jqwikVersion = '1.2.6'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+compileTestJava {
+	options.compilerArgs += '-parameters'
+	options.encoding = 'UTF-8'
+}
+
+test {
+	useJUnitPlatform {
+		includeEngines 'jqwik'
+	}
+
+	include '**/*Spec.class'
+	include '**/*Examples.class'
+	include '**/*Tests.class'
+
+	// testLogging.showStandardStreams = true
+}
+
+
+dependencies {
+
+	testImplementation("net.jqwik:jqwik:${jqwikVersion}")
+	testImplementation("org.assertj:assertj-core:${assertJVersion}")
+	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+
+	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+}
+
+
+wrapper {
+	description = 'Generates gradlew[.bat] scripts'
+	gradleVersion = '6.3'
+}
